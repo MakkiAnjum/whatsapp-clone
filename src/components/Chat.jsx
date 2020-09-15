@@ -8,18 +8,36 @@ import {
   InsertEmoticon,
   Mic,
 } from "@material-ui/icons";
+import { useParams } from "react-router-dom";
+import db from "../firebase";
 
 function Chat() {
   const [input, setInput] = useState("");
+  const { roomId } = useParams();
+  const [roomName, setRoomName] = useState("");
 
-  const sendMessage = (e) => {};
+  useEffect(() => {
+    if (roomId) {
+      console.log(roomId);
+      db.collection("rooms")
+        .doc(roomId)
+        .onSnapshot((snapshot) => setRoomName(snapshot.data().name));
+    }
+    console.log(roomName);
+  }, [roomId]);
+
+  const sendMessage = async (e) => {
+    e.preventDefault();
+
+    setInput("");
+  };
   return (
     <div className="chat">
       {/* Header */}
       <div className="chat__header">
         <Avatar />
         <div className="chat__headerInfo">
-          <h3>Room name</h3>
+          {roomName && <h3>{roomName}</h3>}
           <p>Last seen at ...</p>
         </div>
         <div className="chat__headerRight">
@@ -36,20 +54,15 @@ function Chat() {
       </div>
       {/* Chat body */}
       <div className="chat__body">
-        <p className="chat__message">
-          <span className="chat__name">Makki</span>
-          This is message
-          <span className="chat__timestamp">{new Date().toUTCString()}</span>
+        <p className={`chat__message`}>
+          <span className="chat__name">Makki </span>
+          My message
+          <span className="chat__timestamp">Just now</span>
         </p>
-        <p className="chat__message chat__receiver">
-          <span className="chat__name">Makki</span>
-          This is message
-          <span className="chat__timestamp">{new Date().toUTCString()}</span>
-        </p>
-        <p className="chat__message">
-          <span className="chat__name">Makki</span>
-          This is message
-          <span className="chat__timestamp">{new Date().toUTCString()}</span>
+        <p className={`chat__message chat__receiver`}>
+          <span className="chat__name">Makki </span>
+          My message
+          <span className="chat__timestamp">Just now</span>
         </p>
       </div>
       {/* Chat footer */}
