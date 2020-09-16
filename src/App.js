@@ -8,7 +8,6 @@ import { useStateValue } from './StateProvider';
 
 function App() {
   const [{ user }, dispatch] = useStateValue()
-  const [messages, setMessages] = useState([])
 
   useEffect(() => {
 
